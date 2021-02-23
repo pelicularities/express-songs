@@ -15,13 +15,6 @@ app.post("/*", requireJsonContent, (req, res, next) => {
   next();
 });
 
-// ROUTERS
-const songsRouter = require("./routes/songs.routes");
-const moviesRouter = require("./routes/movies.routes");
-
-app.use("/songs", songsRouter);
-app.use("/movies", moviesRouter);
-
 // ROUTES - ROOT
 app.get("/", (req, res) => {
   res.status(200).send("Hello World");
@@ -31,11 +24,12 @@ app.post("/", (req, res) => {
   res.status(201).send("Thanks for the JSON!");
 });
 
-// ROUTES - USERS
-app.post("/users", (req, res) => {
-  res.send(
-    `You would like to create a user with username ${req.body.username}`
-  );
-});
+// ROUTERS
+const songsRouter = require("./routes/songs.routes");
+const moviesRouter = require("./routes/movies.routes");
+const usersRouter = require("./routes/users.routes");
 
+app.use("/songs", songsRouter);
+app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
 module.exports = app;
