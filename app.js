@@ -20,6 +20,8 @@ const songs = [
   },
 ];
 
+const movies = [];
+
 // MIDDLEWARE
 const requireJsonContent = (req, res, next) => {
   if (req.headers["content-type"] !== "application/json") {
@@ -58,15 +60,24 @@ app.param("songId", (req, res, next, songId) => {
   next();
 });
 
-// ROUTES
+app.param("movieId", (req, res, next, movieId) => {
+  const movie = movies.find((movie) => movie.id === parseInt(movieId));
+  const movieIndex = movies.indexOf(movie);
+  req.movie = movie;
+  req.movieIndex = movieIndex;
+  next();
+});
+
+// ROUTES - ROOT
 app.get("/", (req, res) => {
   res.status(200).send("Hello World");
 });
 
-app.post("/", requireJsonContent, (req, res) => {
+app.post("/", (req, res) => {
   res.status(201).send("Thanks for the JSON!");
 });
 
+// ROUTES - SONGS
 app.get("/songs", (req, res) => {
   res.status(200).json(songs);
 });
@@ -97,7 +108,41 @@ app.delete("/songs/:songId", (req, res) => {
   res.status(200).json(req.song);
 });
 
-app.post("/users", requireJsonContent, (req, res) => {
+// ROUTES - MOVIES
+app.get("/movies", (req, res) => {
+  res.status(200).json(movies);
+});
+
+app.get("/movies/:movieId", (req, res) => {
+  res.status(200).json(req.movie);
+});
+
+app.post("/movies", (req, res) => {
+  const newMovie = {
+    id: movies.length + 1,
+    ...req.body,
+  };
+  movies.push(newMovie);
+  res.status(201).json(newMovie);
+});
+
+app.put("/movies/:movieId", (req, res) => {
+  movies[req.movieIndex] = {
+    id: req.movie.id,
+    ...req.body,
+  };
+  console.log(movies);
+  res.status(200).json(movies[req.movieIndex]);
+});
+
+app.delete("/movies/:movieId", (req, res) => {
+  movies.splice(req.movieIndex, 1);
+  res.status(200).json(req.movie);
+});
+
+// ROUTES - USERS
+
+app.post("/users", (req, res) => {
   res.send(
     `You would like to create a user with username ${req.body.username}`
   );

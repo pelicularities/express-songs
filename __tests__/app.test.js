@@ -68,7 +68,7 @@ describe("/songs", () => {
     expect(actualSong).toMatchObject(song);
   });
 
-  it("should respond correctly to a PUT request", async () => {
+  it("should respond correctly to a PUT request with song ID", async () => {
     const updatedSong = {
       name: "Fly Me To The Moon",
       artist: "Frank Sinatra",
@@ -80,7 +80,7 @@ describe("/songs", () => {
     expect(response.body).toMatchObject(updatedSong);
   });
 
-  it("should respond correctly to a DELETE request", async () => {
+  it("should respond correctly to a DELETE request with song ID", async () => {
     const deletedSong = {
       id: 1,
       name: "Fly Me To The Moon",
@@ -132,13 +132,14 @@ describe("/movies", () => {
     };
     const { body: updatedMovie } = await request(app)
       .put("/movies/1")
+      .send(expectedResult)
       .expect(200);
     expect(updatedMovie).toMatchObject(expectedResult);
   });
-  it("should respond correctly to a DELETE request", async () => {
+  it("should respond correctly to a DELETE request with movie ID", async () => {
     const expectedResult = {
       id: 1,
-      movieName: "Lion King",
+      movieName: "Frozen 2",
     };
     const { body: deletedMovie } = await request(app)
       .delete("/movies/1")
