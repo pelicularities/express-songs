@@ -20,6 +20,7 @@ const songs = [
   },
 ];
 
+// MIDDLEWARE
 const requireJsonContent = (req, res, next) => {
   if (req.headers["content-type"] !== "application/json") {
     res.status(400).send("Server wants application/json");
@@ -43,18 +44,27 @@ app.use("/songs", (req, res, next) => {
   next();
 });
 
+app.post("/songs", (req, res, next) => {
+  console.log("/songs POST level middleware!");
+  next();
+});
+
+// PARAM CALLBACKS
+app.param("songId", (req, res, next, songId) => {
+  const song = songs.find((song) => song.id === parseInt(songId));
+  const songIndex = songs.indexOf(song);
+  req.song = song;
+  req.songIndex = songIndex;
+  next();
+});
+
+// ROUTES
 app.get("/songs", (req, res) => {
   res.status(200).json(songs);
 });
 
-app.get("/songs/:id", (req, res) => {
-  const song = songs.find((song) => song.id === parseInt(req.params.id));
-  res.status(200).json(song);
-});
-
-app.post("/songs", (req, res, next) => {
-  console.log("/songs POST level middleware!");
-  next();
+app.get("/songs/:songId", (req, res) => {
+  res.status(200).json(req.song);
 });
 
 app.post("/songs", (req, res) => {
@@ -66,25 +76,17 @@ app.post("/songs", (req, res) => {
   res.status(201).json(newSong);
 });
 
-app.put("/songs/:id", (req, res) => {
-  const songIndex = songs.findIndex(
-    (song) => song.id === parseInt(req.params.id)
-  );
-  const updatedSong = {
-    id: req.params.id,
+app.put("/songs/:songId", (req, res) => {
+  songs[req.songIndex] = {
+    id: req.song.id,
     ...req.body,
   };
-  songs[songIndex] = updatedSong;
-  res.status(200).json(updatedSong);
+  res.status(200).json(songs[req.songIndex]);
 });
 
-app.delete("/songs/:id", (req, res) => {
-  const songIndex = songs.findIndex(
-    (song) => song.id === parseInt(req.params.id)
-  );
-  song = songs[songIndex];
-  songs.splice(songIndex, 1);
-  res.status(200).json(song);
+app.delete("/songs/:songId", (req, res) => {
+  songs.splice(req.songIndex, 1);
+  res.status(200).json(req.song);
 });
 
 app.post("/users", requireJsonContent, (req, res) => {
