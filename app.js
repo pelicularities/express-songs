@@ -29,25 +29,25 @@ const requireJsonContent = (req, res, next) => {
   }
 };
 
-app.use((req, res, next) => {
-  console.log("App-level middleware!");
+app.post("/*", requireJsonContent, (req, res, next) => {
+  // console.log("app-level POST method middleware!");
   next();
 });
 
-app.use("/users", (req, res, next) => {
-  console.log("/users level middleware!");
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("App-level middleware!");
+//   next();
+// });
 
-app.use("/songs", (req, res, next) => {
-  console.log("/songs level middleware!");
-  next();
-});
+// app.use("/users", (req, res, next) => {
+//   console.log("/users level middleware!");
+//   next();
+// });
 
-app.post("/songs", (req, res, next) => {
-  console.log("/songs POST level middleware!");
-  next();
-});
+// app.use("/songs", (req, res, next) => {
+//   console.log("/songs level middleware!");
+//   next();
+// });
 
 // PARAM CALLBACKS
 app.param("songId", (req, res, next, songId) => {
@@ -59,6 +59,14 @@ app.param("songId", (req, res, next, songId) => {
 });
 
 // ROUTES
+app.get("/", (req, res) => {
+  res.status(200).send("Hello World");
+});
+
+app.post("/", requireJsonContent, (req, res) => {
+  res.status(201).send("Thanks for the JSON!");
+});
+
 app.get("/songs", (req, res) => {
   res.status(200).json(songs);
 });
