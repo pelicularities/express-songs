@@ -47,7 +47,7 @@ describe("Songs", () => {
     ]);
   });
 
-  it("should respond correctly to a valid POST request to songs endpoint", async () => {
+  it("should respond correctly to a valid POST request to /songs endpoint", async () => {
     const song = {
       name: "Anything Goes",
       artist: "Frank Sinatra",
@@ -65,6 +65,32 @@ describe("Songs", () => {
       .send("not json")
       .expect(400);
     expect(text).toEqual("Server wants application/json");
+  });
+
+  it("should respond correctly to a valid PUT request to /songs endpoint", async () => {
+    const updatedSong = {
+      name: "Fly Me To The Moon",
+      artist: "Frank Sinatra",
+    };
+    const { body: actualSong } = await request(app)
+      .put("/songs/1")
+      .send(updatedSong)
+      .expect(200);
+    expect(actualSong).toMatchObject(updatedSong);
+  });
+
+  it("should respond correctly to a DELETE request to /songs endpoint", async () => {
+    const deletedSong = {
+      id: 1,
+      name: "Fly Me To The Moon",
+      artist: "Frank Sinatra",
+    };
+    const { body: actualSong } = await request(app)
+      .delete("/songs/1")
+      .expect(200);
+    expect(actualSong).toMatchObject(deletedSong);
+    const { body: allSongs } = await request(app).get("/songs").expect(200);
+    expect(allSongs.length).toEqual(3);
   });
 });
 
