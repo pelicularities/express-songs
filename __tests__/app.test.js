@@ -25,8 +25,8 @@ describe("App", () => {
   });
 });
 
-describe("Songs", () => {
-  it("should respond correctly to a GET request to /songs endpoint", async () => {
+describe("/songs", () => {
+  it("should respond correctly to a GET request", async () => {
     const { body } = await request(app).get("/songs").expect(200);
     expect(body).toEqual([
       {
@@ -47,7 +47,16 @@ describe("Songs", () => {
     ]);
   });
 
-  it("should respond correctly to a valid POST request to /songs endpoint", async () => {
+  it("should respond correctly to a GET request with song ID", async () => {
+    const { body } = await request(app).get("/songs/1").expect(200);
+    expect(body).toEqual({
+      id: 1,
+      name: "My Way",
+      artist: "Frank Sinatra",
+    });
+  });
+
+  it("should respond correctly to a POST request", async () => {
     const song = {
       name: "Anything Goes",
       artist: "Frank Sinatra",
@@ -59,27 +68,19 @@ describe("Songs", () => {
     expect(actualSong).toMatchObject(song);
   });
 
-  it("should respond correctly to a POST request without JSON", async () => {
-    const { text } = await request(app)
-      .post("/songs")
-      .send("not json")
-      .expect(400);
-    expect(text).toEqual("Server wants application/json");
-  });
-
-  it("should respond correctly to a valid PUT request to /songs endpoint", async () => {
+  it("should respond correctly to a PUT request", async () => {
     const updatedSong = {
       name: "Fly Me To The Moon",
       artist: "Frank Sinatra",
     };
-    const { body: actualSong } = await request(app)
+    const response = await request(app)
       .put("/songs/1")
       .send(updatedSong)
       .expect(200);
-    expect(actualSong).toMatchObject(updatedSong);
+    expect(response.body).toMatchObject(updatedSong);
   });
 
-  it("should respond correctly to a DELETE request to /songs endpoint", async () => {
+  it("should respond correctly to a DELETE request", async () => {
     const deletedSong = {
       id: 1,
       name: "Fly Me To The Moon",
@@ -94,8 +95,8 @@ describe("Songs", () => {
   });
 });
 
-describe("Movies", () => {
-  it("should respond correctly to a POST request with valid JSON", async () => {
+describe("/movies", () => {
+  it("should respond correctly to a POST request", async () => {
     const movie = { movieName: "Lion King" };
     const { body: actualMovie } = await request(app)
       .post("/movies")
@@ -103,7 +104,7 @@ describe("Movies", () => {
       .expect(201);
     expect(actualMovie).toMatchObject(movie);
   });
-  it("should respond to a GET request with an array containing one movie", async () => {
+  it("should respond correctly to a GET request", async () => {
     const expectedResult = [
       {
         id: 1,
