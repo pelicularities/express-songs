@@ -48,11 +48,11 @@ describe("/songs", () => {
       name: "Fly Me To The Moon",
       artist: "Frank Sinatra",
     };
-    const response = await request(app)
+    const { body: actualSong } = await request(app)
       .put("/songs/1")
       .send(updatedSong)
       .expect(200);
-    expect(response.body).toMatchObject(updatedSong);
+    expect(actualSong).toMatchObject(updatedSong);
   });
 
   it("should respond correctly to a DELETE request with song ID", async () => {
