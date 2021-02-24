@@ -57,10 +57,9 @@ router.post("/", (req, res, next) => {
     const error = new Error(validation.error.details[0].message);
     error.statusCode = 400;
     next(error);
-  } else {
-    songs.push(newSong);
-    res.status(201).json(newSong);
   }
+  songs.push(newSong);
+  res.status(201).json(newSong);
 });
 
 router.put("/:songId", (req, res, next) => {
