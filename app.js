@@ -32,4 +32,13 @@ const usersRouter = require("./routes/users.routes");
 app.use("/songs", songsRouter);
 app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
+
+// ERROR HANDLERS
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send(
+    `Error ${err.statusCode}: ${err.message}.\nWhat on earth did you send?`
+  );
+});
+
 module.exports = app;
