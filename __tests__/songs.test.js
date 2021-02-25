@@ -6,26 +6,11 @@ const request = require("supertest");
 const app = require("../app");
 describe("/songs", () => {
   it("should respond correctly to a GET request", async () => {
-    const expectedSongs = [
-      {
-        name: "My Way",
-        artist: "Frank Sinatra",
-      },
-      {
-        name: "Starlight Express",
-        artist: "Andrew Lloyd Webber",
-      },
-      {
-        name: "Doesn't know this ditty",
-        artist: "Sinatra",
-      },
-    ];
     const { body } = await request(app).get("/songs").expect(200);
-
     expect(body.length).toBeGreaterThanOrEqual(3);
   });
 
-  it("should respond correctly to a GET request with song ID", async () => {
+  xit("should respond correctly to a GET request with song ID", async () => {
     const { body } = await request(app).get("/songs/1").expect(200);
     expect(body).toMatchObject({
       name: "My Way",
@@ -33,8 +18,7 @@ describe("/songs", () => {
     });
   });
 
-  /*
-  it("should respond correctly to a POST request", async () => {
+  xit("should respond correctly to a POST request", async () => {
     const song = {
       name: "Anything Goes",
       artist: "Frank Sinatra",
@@ -46,7 +30,7 @@ describe("/songs", () => {
     expect(actualSong).toMatchObject(song);
   });
 
-  it("should respond correctly to a PUT request with song ID", async () => {
+  xit("should respond correctly to a PUT request with song ID", async () => {
     const updatedSong = {
       name: "Fly Me To The Moon",
       artist: "Frank Sinatra",
@@ -58,7 +42,7 @@ describe("/songs", () => {
     expect(actualSong).toMatchObject(updatedSong);
   });
 
-  it("should respond correctly to a DELETE request with song ID", async () => {
+  xit("should respond correctly to a DELETE request with song ID", async () => {
     const deletedSong = {
       id: 1,
       name: "Fly Me To The Moon",
@@ -71,5 +55,4 @@ describe("/songs", () => {
     const { body: allSongs } = await request(app).get("/songs").expect(200);
     expect(allSongs.length).toEqual(3);
   });
-  */
 });

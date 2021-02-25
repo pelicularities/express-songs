@@ -4,11 +4,12 @@ const Schema = mongoose.Schema;
 const songSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Song name is required"],
   },
   artist: {
     type: String,
-    required: true,
+    // TODO: error message plz
+    required: [true, "Artist name is required"],
   },
 });
 
