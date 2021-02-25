@@ -5,14 +5,17 @@ const handleError = require("./utils/handleError");
 const createSongsPromise = () => {
   return Song.create([
     {
+      id: 1,
       name: "My Way",
       artist: "Frank Sinatra",
     },
     {
+      id: 2,
       name: "Starlight Express",
       artist: "Andrew Lloyd Webber",
     },
     {
+      id: 3,
       name: "Doesn't know this ditty",
       artist: "Sinatra",
     },
