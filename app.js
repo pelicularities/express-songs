@@ -1,3 +1,6 @@
+require("./utils/db");
+const Song = require("./models/song.model");
+
 const express = require("express");
 const app = express();
 app.use(express.json());
