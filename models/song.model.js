@@ -8,7 +8,6 @@ const songSchema = new Schema({
   },
   artist: {
     type: String,
-    // TODO: error message plz
     required: [true, "Artist name is required"],
   },
 });

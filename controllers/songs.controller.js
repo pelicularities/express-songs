@@ -8,9 +8,9 @@ const findAll = async (next) => {
   }
 };
 
-const findOne = async (id, next) => {
+const findOne = async (name, next) => {
   try {
-    const song = Song.findById(id);
+    const song = Song.findOne({ name: name });
     if (!song) {
       const error = new Error("Song not found");
       error.statusCode = 404;
@@ -30,9 +30,11 @@ const createOne = async (body, next) => {
   }
 };
 
-const updateOne = async (id, body, next) => {
+const updateOne = async (name, body, next) => {
   try {
-    const updatedSong = await Song.findByIdAndUpdate(id, body, { new: true });
+    const updatedSong = await Song.findOneAndUpdate({ name: name }, body, {
+      new: true,
+    });
     if (!updatedSong) {
       const error = new Error("Song not found");
       error.statusCode = 404;
@@ -44,9 +46,9 @@ const updateOne = async (id, body, next) => {
   }
 };
 
-const deleteOne = async (id, next) => {
+const deleteOne = async (name, next) => {
   try {
-    return await Song.findByIdAndDelete(id);
+    return await Song.findOneAndDelete({ name: name });
   } catch (error) {
     next(error);
   }

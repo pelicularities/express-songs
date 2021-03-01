@@ -11,8 +11,8 @@ router.get("/", async (req, res, next) => {
   res.status(200).json(songs);
 });
 
-router.get("/:songId", async (req, res, next) => {
-  const song = await songsController.findOne(req.params.songId, next);
+router.get("/:songName", async (req, res, next) => {
+  const song = await songsController.findOne(req.params.songName, next);
   res.status(200).json(song);
 });
 
@@ -21,17 +21,20 @@ router.post("/", async (req, res, next) => {
   res.status(201).json(newSong);
 });
 
-router.put("/:songId", async (req, res, next) => {
+router.put("/:songName", async (req, res, next) => {
   const updatedSong = await songsController.updateOne(
-    req.params.songId,
+    req.params.songName,
     req.body,
     next
   );
   res.status(200).json(updatedSong);
 });
 
-router.delete("/:songId", async (req, res, next) => {
-  const deletedSong = await songsController.deleteOne(req.params.songId, next);
+router.delete("/:songName", async (req, res, next) => {
+  const deletedSong = await songsController.deleteOne(
+    req.params.songName,
+    next
+  );
   res.status(200).json(deletedSong);
 });
 
