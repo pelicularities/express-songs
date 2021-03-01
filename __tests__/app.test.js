@@ -5,9 +5,13 @@
 const request = require("supertest");
 const app = require("../app");
 const dbHandlers = require("../test/dbHandler");
+const mongoose = require("mongoose");
 
 describe("App", () => {
-  beforeAll(async () => await dbHandlers.connect());
+  beforeAll(async () => {
+    await mongoose.disconnect();
+    await dbHandlers.connect();
+  });
 
   afterEach(async () => {
     await dbHandlers.clearDatabase();

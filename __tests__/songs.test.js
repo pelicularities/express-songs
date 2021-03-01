@@ -7,9 +7,13 @@ const app = require("../app");
 const Song = require("../models/song.model");
 // const { teardownMongoose } = require("../test/mongoose");
 const dbHandlers = require("../test/dbHandler");
+const mongoose = require("mongoose");
 
 describe("/songs", () => {
-  beforeAll(async () => await dbHandlers.connect());
+  beforeAll(async () => {
+    await mongoose.disconnect();
+    await dbHandlers.connect();
+  });
 
   beforeEach(async () => {
     const songData = [
