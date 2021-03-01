@@ -9,7 +9,7 @@ const Song = require("../models/song.model");
 const dbHandlers = require("../test/dbHandler");
 
 describe("/songs", () => {
-  afterAll(async () => await dbHandlers.connect());
+  beforeAll(async () => await dbHandlers.connect());
 
   beforeEach(async () => {
     const songData = [

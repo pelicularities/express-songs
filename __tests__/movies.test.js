@@ -4,7 +4,14 @@
 
 const request = require("supertest");
 const app = require("../app");
+const dbHandlers = require("../test/dbHandler");
 describe("/movies", () => {
+  beforeAll(async () => await dbHandlers.connect());
+
+  afterEach(async () => {
+    await dbHandlers.clearDatabase();
+  });
+  afterAll(async () => await dbHandlers.closeDatabase());
   it("should respond correctly to a POST request", async () => {
     const movie = { movieName: "Lion King" };
     const { body: actualMovie } = await request(app)

@@ -4,8 +4,15 @@
 
 const request = require("supertest");
 const app = require("../app");
+const dbHandlers = require("../test/dbHandler");
 
 describe("App", () => {
+  beforeAll(async () => await dbHandlers.connect());
+
+  afterEach(async () => {
+    await dbHandlers.clearDatabase();
+  });
+  afterAll(async () => await dbHandlers.closeDatabase());
   it("Testing to see if Jest works", () => {
     expect(1).toBe(1);
   });
