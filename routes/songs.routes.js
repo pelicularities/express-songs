@@ -1,30 +1,12 @@
 // EXTERNAL IMPORTS
 const express = require("express");
-const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
 
 // INTERNAL IMPORTS
 const songsController = require("../controllers/songs.controller");
+const protectRoute = require("../middleware/protectRoute");
 
 // APP SETUP AND EXTERNAL MIDDLEWARE
 const router = express.Router();
-router.use(cookieParser());
-
-// INTERNAL MIDDLEWARE
-const protectRoute = (req, res, next) => {
-  try {
-    if (!req.cookies.token) {
-      const err = new Error("You are not authorized");
-      next(err);
-    } else {
-      req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET_KEY);
-      next();
-    }
-  } catch (err) {
-    err.statusCode = 401;
-    next(err);
-  }
-};
 
 // ROUTES
 router.get("/", async (req, res, next) => {
