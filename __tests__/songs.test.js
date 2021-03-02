@@ -1,11 +1,17 @@
 const request = require("supertest");
 const app = require("../app");
 const Song = require("../models/song.model");
+const User = require("../models/user.model");
 const dbHandlers = require("../test/dbHandler");
+const createJWTToken = require("../config/jwt");
 
 describe("/songs", () => {
+  let token;
   beforeAll(async () => {
     await dbHandlers.connect();
+    const user = new User({ username: "testuser", password: "testpassword" });
+    await user.save();
+    token = createJWTToken(user.username);
   });
 
   beforeEach(async () => {
@@ -58,7 +64,15 @@ describe("/songs", () => {
     expect(actualSong).toMatchObject(song);
   });
 
-  it("should respond correctly to a PUT request with song name", async () => {
+  it("should throw error in response to PUT request if unauthorized", async () => {
+    const updatedSong = {
+      name: "Fly Me To The Moon",
+      artist: "Frank Sinatra",
+    };
+    await request(app).put("/songs/My Way").send(updatedSong).expect(401);
+  });
+
+  it("should modify correct song in response to PUT request if authorised and given valid song name", async () => {
     const updatedSong = {
       name: "Fly Me To The Moon",
       artist: "Frank Sinatra",
@@ -66,17 +80,23 @@ describe("/songs", () => {
     const { body: actualSong } = await request(app)
       .put("/songs/My Way")
       .send(updatedSong)
+      .set("Cookie", `token=${token}`)
       .expect(200);
     expect(actualSong).toMatchObject(updatedSong);
   });
 
-  it("should respond correctly to a DELETE request with song name", async () => {
+  it("should throw error in response to DELETE request if unauthorised", async () => {
+    await request(app).delete("/songs/My Way").expect(401);
+  });
+
+  it("should delete correct song in response to DELETE request if authorised and given valid song name", async () => {
     const deletedSong = {
       name: "My Way",
       artist: "Frank Sinatra",
     };
     const { body: actualSong } = await request(app)
       .delete("/songs/My Way")
+      .set("Cookie", `token=${token}`)
       .expect(200);
     expect(actualSong).toMatchObject(deletedSong);
     const { body: allSongs } = await request(app).get("/songs").expect(200);

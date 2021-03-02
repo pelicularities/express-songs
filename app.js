@@ -45,13 +45,8 @@ app.use("/", loginRouter);
 
 // ERROR HANDLERS
 app.use((err, req, res, next) => {
-  console.log(err);
   err.statusCode = err.statusCode || 500;
-  res
-    .status(err.statusCode)
-    .send(
-      `Error ${err.statusCode}: ${err.message}\nWhat on earth did you send?`
-    );
+  res.status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
 });
 
 module.exports = app;
