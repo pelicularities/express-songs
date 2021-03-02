@@ -2,8 +2,25 @@ require("../utils/db");
 
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const songsController = require("../controllers/songs.controller");
+
+// MIDDLEWARE
+const protectRoute = (req, res, next) => {
+  try {
+    if (!req.cookies.token) {
+      const err = new Error("You are not authorized");
+      next(err);
+    } else {
+      req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET_KEY);
+      next();
+    }
+  } catch (err) {
+    err.statusCode = 401;
+    next(err);
+  }
+};
 
 // ROUTES
 router.get("/", async (req, res, next) => {
@@ -21,7 +38,7 @@ router.post("/", async (req, res, next) => {
   res.status(201).json(newSong);
 });
 
-router.put("/:songName", async (req, res, next) => {
+router.put("/:songName", protectRoute, async (req, res, next) => {
   const updatedSong = await songsController.updateOne(
     req.params.songName,
     req.body,
@@ -30,7 +47,7 @@ router.put("/:songName", async (req, res, next) => {
   res.status(200).json(updatedSong);
 });
 
-router.delete("/:songName", async (req, res, next) => {
+router.delete("/:songName", protectRoute, async (req, res, next) => {
   const deletedSong = await songsController.deleteOne(
     req.params.songName,
     next

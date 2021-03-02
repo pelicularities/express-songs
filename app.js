@@ -3,9 +3,11 @@ require("./utils/db");
 const User = require("./models/user.model");
 const bcrypt = require("bcryptjs");
 const createJWTToken = require("./config/jwt");
+const cookieParser = require("cookie-parser");
 
 const express = require("express");
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 // MIDDLEWARE
