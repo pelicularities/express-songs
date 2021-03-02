@@ -1,12 +1,16 @@
-require("../utils/db");
-
+// EXTERNAL IMPORTS
 const express = require("express");
-const router = express.Router();
+const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 
+// INTERNAL IMPORTS
 const songsController = require("../controllers/songs.controller");
 
-// MIDDLEWARE
+// APP SETUP AND EXTERNAL MIDDLEWARE
+const router = express.Router();
+router.use(cookieParser());
+
+// INTERNAL MIDDLEWARE
 const protectRoute = (req, res, next) => {
   try {
     if (!req.cookies.token) {

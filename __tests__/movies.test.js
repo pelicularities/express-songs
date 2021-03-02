@@ -1,14 +1,9 @@
-/**
- * @jest-environment node
- */
-
 const request = require("supertest");
 const app = require("../app");
 const dbHandlers = require("../test/dbHandler");
-const mongoose = require("mongoose");
+
 describe("/movies", () => {
   beforeAll(async () => {
-    await mongoose.disconnect();
     await dbHandlers.connect();
   });
 

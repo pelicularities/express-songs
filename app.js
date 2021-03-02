@@ -1,14 +1,11 @@
 // EXTERNAL IMPORTS
 const express = require("express");
-const cookieParser = require("cookie-parser");
 
 // INTERNAL IMPORTS
 require("dotenv").config();
-require("./utils/db");
 
 // APP SETUP AND EXTERNAL MIDDLEWARE
 const app = express();
-app.use(cookieParser());
 app.use(express.json());
 
 // INTERNAL MIDDLEWARE
