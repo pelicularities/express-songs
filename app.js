@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("./utils/db");
 const Song = require("./models/song.model");
 

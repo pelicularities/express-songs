@@ -1,10 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../models/user.model");
 
-router.post("/", (req, res) => {
-  res
-    .status(200)
-    .send(`You would like to create a user with username ${req.body.username}`);
+router.post("/", async (req, res, next) => {
+  try {
+    // instantiate new user instance
+    const user = new User(req.body);
+
+    // save user instance to DB
+    const newUser = await user.save();
+
+    res.status(200).send(newUser);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
