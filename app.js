@@ -82,9 +82,11 @@ app.use("/users", usersRouter);
 app.use((err, req, res, next) => {
   console.log(err);
   err.statusCode = err.statusCode || 500;
-  res.send(
-    `Error ${err.statusCode}: ${err.message}\nWhat on earth did you send?`
-  );
+  res
+    .status(err.statusCode)
+    .send(
+      `Error ${err.statusCode}: ${err.message}\nWhat on earth did you send?`
+    );
 });
 
 module.exports = app;

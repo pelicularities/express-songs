@@ -12,6 +12,7 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(newUser);
   } catch (err) {
+    err.statusCode = 422;
     next(err);
   }
 });

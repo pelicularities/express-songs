@@ -22,9 +22,6 @@ describe("/users", () => {
     const response = await request(app)
       .post("/users")
       .send({ username: "YOLO!" })
-      .expect(200);
-    expect(response.text).toEqual(
-      "You would like to create a user with username YOLO!"
-    );
+      .expect(422);
   });
 });
